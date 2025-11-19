@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Murat Altun | Yapay Zeka & Eğitim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        ai: {
+                            dark: '#0f172a',
+                            light: '#1e293b',
+                            accent: '#06b6d4', // Cyan
+                            glow: '#3b82f6', // Blue
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        /* Glassmorphism */
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+            border-color: #06b6d4;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06b6d4;
+        }
+
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 100%;
+            width: 2px;
+            background: linear-gradient(to bottom, #06b6d4, #3b82f6);
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                        Dr. Murat Altun
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Ana Sayfa</a>
+                        <a href="#about" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Hakkımda</a>
+                        <a href="#experience" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Deneyim & Eğitim</a>
+                        <a href="#books" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Kitaplar</a>
+                        <a href="#contact" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-all shadow-lg shadow-cyan-500/30">İletişim</a>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass border-t border-slate-700">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium">Ana Sayfa</a>
+                <a href="#about" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium">Hakkımda</a>
+                <a href="#experience" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium">Deneyim & Eğitim</a>
+                <a href="#books" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium">Kitaplar</a>
+                <a href="#contact" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium">İletişim</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div id="canvas-container"></div>
+        
+        <!-- Decorative Blobs -->
+        <div class="absolute top-20 left-20 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div class="absolute top-20 right-20 w-72 h-72 bg-cyan-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-1/2 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+
+        <div class="relative z-10 text-center px-4">
+            <div class="inline-block mb-4 px-4 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-sm font-semibold tracking-wide uppercase backdrop-blur-sm">
+                Dr. Murat Altun
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+                    Geleceği Tasarlıyoruz
+                </span>
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-400 mb-8 h-8">
+                <span id="typewriter" class="typing-cursor"></span>
+            </p>
+            
+            <div class="flex justify-center gap-4 flex-wrap">
+                <a href="#contact" class="group relative px-8 py-3 rounded-full bg-cyan-600 text-white font-semibold shadow-lg shadow-cyan-500/30 hover:bg-cyan-500 transition-all overflow-hidden">
+                    <div class="absolute inset-0 w-0 bg-white transition-all duration-[250ms] ease-out group-hover:w-full opacity-10"></div>
+                    <span class="relative">İletişime Geç</span>
+                </a>
+                <a href="#books" class="px-8 py-3 rounded-full border border-slate-600 hover:border-cyan-400 text-slate-300 hover:text-white transition-all bg-slate-800/50 backdrop-blur-sm">
+                    Kitaplarımı İncele
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#about" class="text-slate-500 hover:text-cyan-400 transition-colors">
+                <i class="fas fa-chevron-down text-2xl"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-slate-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="reveal-on-scroll order-2 md:order-1">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl blur opacity-30 transform rotate-3"></div>
+                        <div class="relative glass rounded-2xl p-8 border border-slate-700/50">
+                            <div class="flex items-center mb-6">
+                                <div class="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center text-cyan-400 mr-4">
+                                    <i class="fas fa-brain text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white">Uzmanlık Alanları</h3>
+                            </div>
+                            <div class="space-y-5">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-slate-300 font-medium">Yapay Zeka & LLM</span>
+                                        <span class="text-cyan-400 text-sm">Uzman</span>
+                                    </div>
+                                    <div class="w-full bg-slate-700 rounded-full h-2">
+                                        <div class="bg-cyan-500 h-2 rounded-full" style="width: 95%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-slate-300 font-medium">Python & Veri Bilimi</span>
+                                        <span class="text-blue-400 text-sm">İleri Düzey</span>
+                                    </div>
+                                    <div class="w-full bg-slate-700 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: 92%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-slate-300 font-medium">Veri Madenciliği</span>
+                                        <span class="text-purple-400 text-sm">Akademik</span>
+                                    </div>
+                                    <div class="w-full bg-slate-700 rounded-full h-2">
+                                        <div class="bg-purple-500 h-2 rounded-full" style="width: 90%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-slate-300 font-medium">Eğitim Teknolojileri</span>
+                                        <span class="text-teal-400 text-sm">Lider</span>
+                                    </div>
+                                    <div class="w-full bg-slate-700 rounded-full h-2">
+                                        <div class="bg-teal-500 h-2 rounded-full" style="width: 98%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal-on-scroll order-1 md:order-2">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">
+                        Dr. Murat Altun <span class="text-cyan-400">Kimdir?</span>
+                    </h2>
+                    <p class="text-slate-400 text-lg leading-relaxed mb-6">
+                        Eğitim Yönetimi, Teftişi, Planlaması ve Ekonomisi alanında doktora derecesine sahip, bilişim teknolojileri ve yapay zeka alanında 20 yılı aşkın deneyimi olan bir eğitimci ve akademisyenim.
+                    </p>
+                    <p class="text-slate-400 text-lg leading-relaxed mb-6">
+                        Özellikle <strong>Veri Madenciliği</strong> ile öğrenci akademik performans tahmini üzerine akademik çalışmalarım bulunmaktadır. BTK Akademi, MEB ve üniversitelerde binlerce öğrenciye ve eğitimciye Python, Makine Öğrenmesi ve Büyük Dil Modelleri (LLM) eğitimleri verdim.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass p-4 rounded-xl border border-slate-700 text-center">
+                            <i class="fas fa-book text-2xl text-cyan-400 mb-2"></i>
+                            <div class="font-bold text-xl text-white">6+ Kitap</div>
+                            <div class="text-xs text-slate-500">Yayınlanmış Eser</div>
+                        </div>
+                        <div class="glass p-4 rounded-xl border border-slate-700 text-center">
+                            <i class="fas fa-chalkboard-user text-2xl text-blue-400 mb-2"></i>
+                            <div class="font-bold text-xl text-white">600+ Saat</div>
+                            <div class="text-xs text-slate-500">BTK Akademi Eğitimi</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience & Education Section -->
+    <section id="experience" class="py-20 bg-slate-900 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <div class="text-center mb-16 reveal-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Eğitim & <span class="text-cyan-400">Deneyim</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Akademik yolculuğum ve profesyonel kariyerimden öne çıkan başlıklar.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Education Column -->
+                <div class="space-y-6 reveal-on-scroll">
+                    <h3 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
+                        <i class="fas fa-graduation-cap text-cyan-400"></i> Akademik Eğitim
+                    </h3>
+                    
+                    <!-- PhD -->
+                    <div class="glass p-6 rounded-xl border border-slate-700 border-l-4 border-l-cyan-500 hover:bg-slate-800/50 transition-colors">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-xl font-bold text-white">Doktora (Dr.)</h4>
+                                <p class="text-cyan-400">Akdeniz Üniversitesi</p>
+                            </div>
+                            <span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-400">2015 - 2019</span>
+                        </div>
+                        <p class="text-slate-400 mt-2 text-sm">Eğitim Yönetimi, Teftişi, Planlaması ve Ekonomisi.</p>
+                        <p class="text-slate-500 text-xs mt-1 italic">Tez: Veri Madenciliği ile Öğrenci Akademik Performans Tahmini (GPA: 4.0/4.0)</p>
+                    </div>
+
+                    <!-- Master -->
+                    <div class="glass p-6 rounded-xl border border-slate-700 border-l-4 border-l-blue-500 hover:bg-slate-800/50 transition-colors">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-xl font-bold text-white">Yüksek Lisans</h4>
+                                <p class="text-blue-400">Dokuz Eylül Üniversitesi</p>
+                            </div>
+                            <span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-400">2009 - 2013</span>
+                        </div>
+                        <p class="text-slate-400 mt-2 text-sm">Eğitim Bilimleri Enstitüsü.</p>
+                    </div>
+
+                    <!-- Bachelor -->
+                    <div class="glass p-6 rounded-xl border border-slate-700 border-l-4 border-l-purple-500 hover:bg-slate-800/50 transition-colors">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-xl font-bold text-white">Lisans</h4>
+                                <p class="text-purple-400">Eskişehir Osmangazi Üniversitesi</p>
+                            </div>
+                            <span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-400">2000 - 2004</span>
+                        </div>
+                        <p class="text-slate-400 mt-2 text-sm">Bilgisayar ve Öğretim Teknolojileri Eğitimi.</p>
+                    </div>
+                </div>
+
+                <!-- Experience Column -->
+                <div class="space-y-6 reveal-on-scroll" style="animation-delay: 200ms;">
+                    <h3 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
+                        <i class="fas fa-briefcase text-cyan-400"></i> Profesyonel Deneyim
+                    </h3>
+
+                    <!-- BTK -->
+                    <div class="glass p-6 rounded-xl border border-slate-700 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-cyan-500/10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:bg-cyan-500/20"></div>
+                        <h4 class="text-xl font-bold text-white">BTK Akademi Eğitmeni</h4>
+                        <p class="text-cyan-400 text-sm mb-2">Bilgi Teknolojileri ve İletişim Kurumu | 3 Yıl</p>
+                        <ul class="list-disc list-inside text-slate-400 text-sm space-y-1">
+                            <li>Python, Makine Öğrenmesi, LLM Eğitimleri (600+ Saat)</li>
+                            <li>Yapay Zeka Atölyeleri ve İleri Seviye ML</li>
+                        </ul>
+                    </div>
+
+                    <!-- MEB / YEĞİTEK -->
+                    <div class="glass p-6 rounded-xl border border-slate-700 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:bg-blue-500/20"></div>
+                        <h4 class="text-xl font-bold text-white">İçerik Geliştirici & Eğitmen</h4>
+                        <p class="text-blue-400 text-sm mb-2">MEB YEĞİTEK & Hizmetiçi Eğitim</p>
+                        <ul class="list-disc list-inside text-slate-400 text-sm space-y-1">
+                            <li>EBA ve ÖBA Yapay Zeka İçerik Geliştirme</li>
+                            <li>Öğretmen Eğitimleri (400+ Saat)</li>
+                        </ul>
+                    </div>
+
+                    <!-- University -->
+                    <div class="glass p-6 rounded-xl border border-slate-700 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-purple-500/10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:bg-purple-500/20"></div>
+                        <h4 class="text-xl font-bold text-white">Öğretim Görevlisi</h4>
+                        <p class="text-purple-400 text-sm mb-2">Akdeniz Üniversitesi | 6 Yıl</p>
+                        <p class="text-slate-400 text-sm">Korkuteli MYO ve YBS Bölümü'nde programlama ve robotik dersleri.</p>
+                    </div>
+
+                     <!-- Projects -->
+                     <div class="glass p-6 rounded-xl border border-slate-700 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-green-500/10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:bg-green-500/20"></div>
+                        <h4 class="text-xl font-bold text-white">TÜBİTAK Projeleri</h4>
+                        <p class="text-green-400 text-sm mb-2">Proje Yürütücüsü & Danışman</p>
+                        <p class="text-slate-400 text-sm">4006 Bilim Fuarları, 224B281 Yapay Zeka projeleri ve Deneyap Eğitmenliği.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Books Section -->
+    <section id="books" class="py-20 bg-slate-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Yayınlanmış <span class="text-cyan-400">Eserlerim</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Eğitim ve teknoloji dünyasına katkı sunmak amacıyla kaleme aldığım kitaplar.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Kitap 1 -->
+                <div class="glass p-6 rounded-xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll">
+                    <div class="h-48 bg-gradient-to-br from-blue-900 to-slate-800 rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-chalkboard-teacher text-6xl text-blue-400/50 group-hover:scale-110 transition-transform duration-500"></i>
+                        <div class="absolute inset-0 bg-blue-500/10 group-hover:bg-blue-500/0 transition-colors"></div>
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-bold bg-cyan-500/20 text-cyan-400 px-2 py-1 rounded">2023</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">Yapay Zekâ Öğretmen El Kitabı</h3>
+                    <p class="text-slate-400 text-sm">Eğitimciler için yapay zeka araçlarının sınıfta kullanımı üzerine kapsamlı bir rehber.</p>
+                </div>
+                 <!-- Kitap 6 -->
+                 <div class="glass p-6 rounded-xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll" style="animation-delay: 200ms;">
+                    <div class="h-48 bg-gradient-to-br from-pink-900 to-slate-800 rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-border-all text-6xl text-pink-400/50 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-bold bg-pink-500/20 text-pink-400 px-2 py-1 rounded">2023</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-pink-400 transition-colors">Kilim Kodluyorum</h3>
+                    <p class="text-slate-400 text-sm">Geleneksel motiflerle bilgisayarsız kodlama (unplugged) etkinlikleri.</p>
+                </div>
+
+                <!-- Kitap 2 -->
+                <div class="glass p-6 rounded-xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll" style="animation-delay: 100ms;">
+                    <div class="h-48 bg-gradient-to-br from-purple-900 to-slate-800 rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-robot text-6xl text-purple-400/50 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-bold bg-purple-500/20 text-purple-400 px-2 py-1 rounded">2022</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Yapay Zekâ ve Makine Öğrenmesi</h3>
+                    <p class="text-slate-400 text-sm">Mesleki eğitim müfredatına uygun, teorik ve pratik bilgiler içeren ders kitabı.</p>
+                </div>
+                
+                <!-- Kitap 5 -->
+                <div class="glass p-6 rounded-xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll" style="animation-delay: 100ms;">
+                    <div class="h-48 bg-gradient-to-br from-red-900 to-slate-800 rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-microchip text-6xl text-red-400/50 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-bold bg-red-500/20 text-red-400 px-2 py-1 rounded">2021</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-red-400 transition-colors">Arduino ile Robotik Kodlama</h3>
+                    <p class="text-slate-400 text-sm">Donanım ve yazılımı birleştirerek robotik projeler geliştirmek isteyenler için.</p>
+                </div>
+
+                 <!-- Kitap 4 -->
+                 <div class="glass p-6 rounded-xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll">
+                    <div class="h-48 bg-gradient-to-br from-green-900 to-slate-800 rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-code text-6xl text-green-400/50 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-bold bg-green-500/20 text-green-400 px-2 py-1 rounded">2021</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">Robotik ve Kodlama Eğitimi</h3>
+                    <p class="text-slate-400 text-sm">Algoritmik düşünme ve temel kodlama becerilerini geliştirmek için başvuru kaynağı.</p>
+                </div>
+
+                <!-- Kitap 3 -->
+                <div class="glass p-6 rounded-xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll" style="animation-delay: 200ms;">
+                    <div class="h-48 bg-gradient-to-br from-yellow-900 to-slate-800 rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fab fa-python text-6xl text-yellow-400/50 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-bold bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">2020</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">Herkes İçin Python</h3>
+                    <p class="text-slate-400 text-sm">Programlamaya yeni başlayanlar için adım adım Python dili rehberi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900 to-black"></div>
+        <div class="max-w-5xl mx-auto px-4 relative z-10 text-center reveal-on-scroll">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-8">İletişime <span class="text-cyan-400">Geçin</span></h2>
+            <p class="text-slate-400 mb-12 text-lg">Eğitim, danışmanlık veya projeler için bana ulaşabilirsiniz.</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-12">
+                <!-- Email -->
+                <a href="mailto:emurataltun@gmail.com" class="glass p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition-all group flex flex-col items-center">
+                    <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-cyan-500 transition-colors">
+                        <i class="fas fa-envelope text-white"></i>
+                    </div>
+                    <span class="text-white text-sm font-semibold">Email</span>
+                </a>
+
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/drmurataltun/" target="_blank" class="glass p-4 rounded-xl border border-slate-800 hover:border-blue-500 transition-all group flex flex-col items-center">
+                    <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-blue-600 transition-colors">
+                        <i class="fab fa-linkedin-in text-white"></i>
+                    </div>
+                    <span class="text-white text-sm font-semibold">LinkedIn</span>
+                </a>
+
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/drmurataltun/" target="_blank" class="glass p-4 rounded-xl border border-slate-800 hover:border-pink-500 transition-all group flex flex-col items-center">
+                    <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 transition-colors">
+                        <i class="fab fa-instagram text-white"></i>
+                    </div>
+                    <span class="text-white text-sm font-semibold">Instagram</span>
+                </a>
+
+                 <!-- Linktree -->
+                 <a href="https://linktr.ee/drmurataltun" target="_blank" class="glass p-4 rounded-xl border border-slate-800 hover:border-green-500 transition-all group flex flex-col items-center">
+                    <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-green-500 transition-colors">
+                        <i class="fas fa-tree text-white"></i>
+                    </div>
+                    <span class="text-white text-sm font-semibold">Linktree</span>
+                </a>
+
+                 <!-- ResearchGate -->
+                 <a href="https://www.researchgate.net/profile/Murat_Altun2" target="_blank" class="glass p-4 rounded-xl border border-slate-800 hover:border-teal-500 transition-all group flex flex-col items-center">
+                    <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-teal-500 transition-colors">
+                        <i class="fas fa-graduation-cap text-white"></i>
+                    </div>
+                    <span class="text-white text-sm font-semibold">ResearchGate</span>
+                </a>
+            </div>
+            
+            <div class="text-slate-500 text-sm border-t border-slate-800 pt-8">
+                &copy; 2025 Dr. Murat Altun. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Typewriter Effect
+        const texts = ["Yapay Zeka Uzmanı", "Eğitim Teknoloğu", "Yazar", "Veri Bilimcisi", "BTK Akademi Eğitmeni"];
+        let count = 0;
+        let index = 0;
+        let currentText = "";
+        let letter = "";
+
+        (function type() {
+            if (count === texts.length) {
+                count = 0;
+            }
+            currentText = texts[count];
+            letter = currentText.slice(0, ++index);
+            
+            document.querySelector("#typewriter").textContent = letter;
+            if (letter.length === currentText.length) {
+                setTimeout(() => {
+                    // Wait before deleting
+                    let deleteInterval = setInterval(() => {
+                        letter = currentText.slice(0, --index);
+                        document.querySelector("#typewriter").textContent = letter;
+                        if (index === 0) {
+                            clearInterval(deleteInterval);
+                            count++;
+                            type();
+                        }
+                    }, 50);
+                }, 2000);
+            } else {
+                setTimeout(type, 100);
+            }
+        })();
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in-up');
+                    entry.target.style.opacity = "1";
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
+            el.style.opacity = "0";
+            observer.observe(el);
+        });
+
+        // Navbar Glass Effect on Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-lg');
+                nav.classList.add('bg-slate-900/90');
+            } else {
+                nav.classList.remove('shadow-lg');
+                nav.classList.remove('bg-slate-900/90');
+            }
+        });
+
+        // Simple Particle Background (Canvas)
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        document.getElementById('canvas-container').appendChild(canvas);
+
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2;
+                this.color = Math.random() > 0.5 ? '#06b6d4' : '#3b82f6'; // Cyan or Blue
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = 0.5;
+                ctx.fill();
+            }
+        }
+
+        // Create particles
+        for(let i=0; i<100; i++) particles.push(new Particle());
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw connections
+            particles.forEach((p, index) => {
+                p.update();
+                p.draw();
+                
+                // Connect particles
+                for(let j = index + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    
+                    if(dist < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = p.color;
+                        ctx.globalAlpha = 1 - (dist/100);
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+    </script>
+</body>
+</html>
