@@ -152,7 +152,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-40">
         <div id="canvas-container"></div>
         
         <!-- Decorative Blobs -->
@@ -160,10 +160,24 @@
         <div class="absolute top-20 right-20 w-72 h-72 bg-cyan-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
         <div class="absolute -bottom-8 left-1/2 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
 
-        <div class="relative z-10 text-center px-4">
-            <div class="inline-block mb-4 px-4 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-sm font-semibold tracking-wide uppercase backdrop-blur-sm">
-                Dr. Murat Altun
+        <!-- Content Container with Added Top Margin -->
+        <div class="relative z-10 text-center px-4 mt-16 md:mt-24">
+            
+            <!-- Profile Image -->
+            <div class="mb-8 relative inline-block group animate-fade-in-up">
+                <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
+                <img src="https://raw.githubusercontent.com/DrMuratAltun/drmurataltun.github.io/refs/heads/main/src/vesikal%C4%B1k.jpg" 
+                     alt="Dr. Murat Altun" 
+                     class="relative w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-slate-900 object-cover object-top shadow-2xl transform group-hover:scale-105 transition-transform duration-300"
+                     onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Murat+Altun&background=06b6d4&color=fff&size=256';">
             </div>
+            
+            <div>
+                <div class="inline-block mb-4 px-4 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-sm font-semibold tracking-wide uppercase backdrop-blur-sm">
+                    Dr. Murat Altun
+                </div>
+            </div>
+            
             <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">
                 <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
                     Geleceği Tasarlıyoruz
