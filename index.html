@@ -52,17 +52,17 @@
             overflow-x: hidden;
         }
         
-        /* Glassmorphism */
+        /* Glassmorphism Effect */
         .glass {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .card-hover:hover {
             transform: translateY(-5px);
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.25);
             border-color: #06b6d4;
         }
 
@@ -99,49 +99,39 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
-        
-        .timeline-line {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            height: 100%;
-            width: 2px;
-            background: linear-gradient(to bottom, #06b6d4, #3b82f6);
-            z-index: 0;
-        }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased selection:bg-cyan-500 selection:text-white">
 
     <!-- Navigation -->
     <nav class="fixed w-full z-50 glass transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <div class="flex-shrink-0">
-                    <a href="#" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                    <a href="#" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500 hover:opacity-80 transition-opacity">
                         Dr. Murat Altun
                     </a>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="#home" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Ana Sayfa</a>
-                        <a href="#about" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Hakkımda</a>
-                        <a href="#experience" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Deneyim & Eğitim</a>
-                        <a href="#books" class="hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Kitaplar</a>
-                        <a href="#contact" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-all shadow-lg shadow-cyan-500/30">İletişim</a>
+                        <a href="#home" class="text-slate-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Ana Sayfa</a>
+                        <a href="#about" class="text-slate-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Hakkımda</a>
+                        <a href="#experience" class="text-slate-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Deneyim & Eğitim</a>
+                        <a href="#books" class="text-slate-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Kitaplar</a>
+                        <a href="#contact" class="bg-cyan-600 hover:bg-cyan-500 text-white px-5 py-2 rounded-full text-sm font-medium transition-all shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40">İletişim</a>
                     </div>
                 </div>
                 <!-- Mobile menu button -->
                 <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
             </div>
         </div>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden glass border-t border-slate-700">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div id="mobile-menu" class="hidden md:hidden glass border-t border-slate-700 absolute w-full">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-slate-900/95">
                 <a href="#home" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium">Ana Sayfa</a>
                 <a href="#about" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium">Hakkımda</a>
                 <a href="#experience" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium">Deneyim & Eğitim</a>
@@ -152,109 +142,121 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-40">
+    <section id="home" class="relative h-screen flex flex-col items-center justify-center overflow-hidden pt-20">
         <div id="canvas-container"></div>
         
-        <!-- Decorative Blobs -->
-        <div class="absolute top-20 left-20 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-        <div class="absolute top-20 right-20 w-72 h-72 bg-cyan-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div class="absolute -bottom-8 left-1/2 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+        <!-- Decorative Background Blobs -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-blob"></div>
+        <div class="absolute top-1/3 right-1/4 w-96 h-96 bg-cyan-600/20 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-32 left-1/2 w-96 h-96 bg-blue-600/20 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
 
-        <!-- Content Container with Added Top Margin -->
-        <div class="relative z-10 text-center px-4 mt-16 md:mt-24">
+        <div class="relative z-10 text-center px-4 mt-8 md:mt-16">
             
-            <!-- Profile Image -->
+            <!-- Profile Image Container -->
             <div class="mb-8 relative inline-block group animate-fade-in-up">
-                <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
-                <img src="https://raw.githubusercontent.com/DrMuratAltun/drmurataltun.github.io/refs/heads/main/src/vesikal%C4%B1k.jpg" 
-                     alt="Dr. Murat Altun" 
-                     class="relative w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-slate-900 object-cover object-top shadow-2xl transform group-hover:scale-105 transition-transform duration-300"
-                     onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Murat+Altun&background=06b6d4&color=fff&size=256';">
+                <!-- Glowing Ring Effect -->
+                <div class="absolute -inset-1 bg-gradient-to-tr from-cyan-400 via-blue-500 to-purple-600 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500"></div>
+                
+                <!-- Image -->
+                <div class="relative w-36 h-36 md:w-48 md:h-48 rounded-full border-4 border-slate-900 overflow-hidden shadow-2xl">
+                    <img src="https://raw.githubusercontent.com/DrMuratAltun/drmurataltun.github.io/refs/heads/main/src/vesikal%C4%B1k.jpg" 
+                         alt="Dr. Murat Altun" 
+                         class="w-full h-full object-cover object-top transform group-hover:scale-110 transition-transform duration-500 ease-out"
+                         onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Murat+Altun&background=06b6d4&color=fff&size=256';">
+                </div>
             </div>
             
-            <div>
-                <div class="inline-block mb-4 px-4 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-sm font-semibold tracking-wide uppercase backdrop-blur-sm">
+            <div class="animate-fade-in-up" style="animation-delay: 100ms;">
+                <div class="inline-block mb-4 px-5 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-sm font-bold tracking-wider uppercase backdrop-blur-sm">
                     Dr. Murat Altun
                 </div>
             </div>
             
-            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight animate-fade-in-up" style="animation-delay: 200ms;">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400 drop-shadow-sm">
                     Geleceği Tasarlıyoruz
                 </span>
             </h1>
-            <p class="text-xl md:text-2xl text-slate-400 mb-8 h-8">
+            
+            <p class="text-xl md:text-2xl text-slate-400 mb-10 h-8 font-light animate-fade-in-up" style="animation-delay: 300ms;">
                 <span id="typewriter" class="typing-cursor"></span>
             </p>
             
-            <div class="flex justify-center gap-4 flex-wrap">
-                <a href="#contact" class="group relative px-8 py-3 rounded-full bg-cyan-600 text-white font-semibold shadow-lg shadow-cyan-500/30 hover:bg-cyan-500 transition-all overflow-hidden">
-                    <div class="absolute inset-0 w-0 bg-white transition-all duration-[250ms] ease-out group-hover:w-full opacity-10"></div>
-                    <span class="relative">İletişime Geç</span>
+            <div class="flex justify-center gap-5 flex-wrap animate-fade-in-up" style="animation-delay: 400ms;">
+                <a href="#contact" class="group relative px-8 py-3.5 rounded-full bg-cyan-600 text-white font-semibold shadow-lg shadow-cyan-500/30 hover:bg-cyan-500 transition-all overflow-hidden">
+                    <div class="absolute inset-0 w-0 bg-white/20 transition-all duration-300 ease-out group-hover:w-full"></div>
+                    <span class="relative flex items-center gap-2">
+                        İletişime Geç <i class="fas fa-arrow-right text-sm"></i>
+                    </span>
                 </a>
-                <a href="#books" class="px-8 py-3 rounded-full border border-slate-600 hover:border-cyan-400 text-slate-300 hover:text-white transition-all bg-slate-800/50 backdrop-blur-sm">
+                <a href="#books" class="px-8 py-3.5 rounded-full border border-slate-600 hover:border-cyan-400 text-slate-300 hover:text-white transition-all bg-slate-800/40 hover:bg-slate-800/80 backdrop-blur-sm">
                     Kitaplarımı İncele
                 </a>
             </div>
         </div>
 
         <!-- Scroll Down Indicator -->
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <a href="#about" class="text-slate-500 hover:text-cyan-400 transition-colors">
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce opacity-70 hover:opacity-100 transition-opacity">
+            <a href="#about" class="text-slate-400 hover:text-cyan-400 p-2">
                 <i class="fas fa-chevron-down text-2xl"></i>
             </a>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 bg-slate-900 relative">
+    <section id="about" class="py-24 bg-slate-900 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
                 <div class="reveal-on-scroll order-2 md:order-1">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl blur opacity-30 transform rotate-3"></div>
-                        <div class="relative glass rounded-2xl p-8 border border-slate-700/50">
-                            <div class="flex items-center mb-6">
-                                <div class="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center text-cyan-400 mr-4">
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl blur-lg opacity-25 group-hover:opacity-40 transition duration-500 transform rotate-1"></div>
+                        <div class="relative glass rounded-2xl p-8 border border-slate-700/50 hover:border-cyan-500/30 transition-colors">
+                            <div class="flex items-center mb-8">
+                                <div class="w-14 h-14 bg-cyan-500/10 rounded-xl flex items-center justify-center text-cyan-400 mr-5 border border-cyan-500/20">
                                     <i class="fas fa-brain text-2xl"></i>
                                 </div>
                                 <h3 class="text-2xl font-bold text-white">Uzmanlık Alanları</h3>
                             </div>
-                            <div class="space-y-5">
-                                <div>
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-slate-300 font-medium">Yapay Zeka & LLM</span>
-                                        <span class="text-cyan-400 text-sm">Uzman</span>
+                            
+                            <div class="space-y-6">
+                                <!-- Skill Items -->
+                                <div class="group/skill">
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-slate-300 font-medium group-hover/skill:text-cyan-400 transition-colors">Yapay Zeka & LLM</span>
+                                        <span class="text-cyan-400 text-sm font-semibold">Uzman</span>
                                     </div>
-                                    <div class="w-full bg-slate-700 rounded-full h-2">
-                                        <div class="bg-cyan-500 h-2 rounded-full" style="width: 95%"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-slate-300 font-medium">Python & Veri Bilimi</span>
-                                        <span class="text-blue-400 text-sm">İleri Düzey</span>
-                                    </div>
-                                    <div class="w-full bg-slate-700 rounded-full h-2">
-                                        <div class="bg-blue-500 h-2 rounded-full" style="width: 92%"></div>
+                                    <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                                        <div class="bg-gradient-to-r from-cyan-500 to-blue-500 h-full rounded-full w-[95%] shadow-[0_0_10px_rgba(6,182,212,0.5)]"></div>
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-slate-300 font-medium">Veri Madenciliği</span>
-                                        <span class="text-purple-400 text-sm">Akademik</span>
+                                
+                                <div class="group/skill">
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-slate-300 font-medium group-hover/skill:text-blue-400 transition-colors">Python & Veri Bilimi</span>
+                                        <span class="text-blue-400 text-sm font-semibold">İleri Düzey</span>
                                     </div>
-                                    <div class="w-full bg-slate-700 rounded-full h-2">
-                                        <div class="bg-purple-500 h-2 rounded-full" style="width: 90%"></div>
+                                    <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                                        <div class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full rounded-full w-[92%]"></div>
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-slate-300 font-medium">Eğitim Teknolojileri</span>
-                                        <span class="text-teal-400 text-sm">Lider</span>
+                                
+                                <div class="group/skill">
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-slate-300 font-medium group-hover/skill:text-purple-400 transition-colors">Veri Madenciliği</span>
+                                        <span class="text-purple-400 text-sm font-semibold">Akademik</span>
                                     </div>
-                                    <div class="w-full bg-slate-700 rounded-full h-2">
-                                        <div class="bg-teal-500 h-2 rounded-full" style="width: 98%"></div>
+                                    <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                                        <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full w-[90%]"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="group/skill">
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-slate-300 font-medium group-hover/skill:text-teal-400 transition-colors">Eğitim Teknolojileri</span>
+                                        <span class="text-teal-400 text-sm font-semibold">Lider</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                                        <div class="bg-gradient-to-r from-teal-400 to-emerald-500 h-full rounded-full w-[98%]"></div>
                                     </div>
                                 </div>
                             </div>
@@ -263,25 +265,28 @@
                 </div>
                 
                 <div class="reveal-on-scroll order-1 md:order-2">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">
-                        Dr. Murat Altun <span class="text-cyan-400">Kimdir?</span>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white leading-tight">
+                        Dr. Murat Altun <br><span class="text-cyan-400">Kimdir?</span>
                     </h2>
-                    <p class="text-slate-400 text-lg leading-relaxed mb-6">
-                        Eğitim Yönetimi, Teftişi, Planlaması ve Ekonomisi alanında doktora derecesine sahip, bilişim teknolojileri ve yapay zeka alanında 20 yılı aşkın deneyimi olan bir eğitimci ve akademisyenim.
-                    </p>
-                    <p class="text-slate-400 text-lg leading-relaxed mb-6">
-                        Özellikle <strong>Veri Madenciliği</strong> ile öğrenci akademik performans tahmini üzerine akademik çalışmalarım bulunmaktadır. BTK Akademi, MEB ve üniversitelerde binlerce öğrenciye ve eğitimciye Python, Makine Öğrenmesi ve Büyük Dil Modelleri (LLM) eğitimleri verdim.
-                    </p>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="glass p-4 rounded-xl border border-slate-700 text-center">
-                            <i class="fas fa-book text-2xl text-cyan-400 mb-2"></i>
-                            <div class="font-bold text-xl text-white">6+ Kitap</div>
-                            <div class="text-xs text-slate-500">Yayınlanmış Eser</div>
+                    <div class="space-y-4 text-slate-400 text-lg leading-relaxed">
+                        <p>
+                            Eğitim Yönetimi, Teftişi, Planlaması ve Ekonomisi alanında doktora derecesine sahip, bilişim teknolojileri ve yapay zeka alanında 20 yılı aşkın deneyimi olan bir eğitimci ve akademisyenim.
+                        </p>
+                        <p>
+                            Özellikle <strong>Veri Madenciliği</strong> ile öğrenci akademik performans tahmini üzerine akademik çalışmalarım bulunmaktadır. BTK Akademi, MEB ve üniversitelerde binlerce öğrenciye ve eğitimciye Python, Makine Öğrenmesi ve Büyük Dil Modelleri (LLM) eğitimleri verdim.
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-6 mt-8">
+                        <div class="glass p-5 rounded-xl border border-slate-700/50 hover:border-cyan-500/30 transition-all text-center group">
+                            <i class="fas fa-book text-3xl text-cyan-400 mb-3 group-hover:scale-110 transition-transform"></i>
+                            <div class="font-bold text-2xl text-white">6+</div>
+                            <div class="text-sm text-slate-500 font-medium">Yayınlanmış Kitap</div>
                         </div>
-                        <div class="glass p-4 rounded-xl border border-slate-700 text-center">
-                            <i class="fas fa-chalkboard-user text-2xl text-blue-400 mb-2"></i>
-                            <div class="font-bold text-xl text-white">600+ Saat</div>
-                            <div class="text-xs text-slate-500">BTK Akademi Eğitimi</div>
+                        <div class="glass p-5 rounded-xl border border-slate-700/50 hover:border-blue-500/30 transition-all text-center group">
+                            <i class="fas fa-chalkboard-user text-3xl text-blue-400 mb-3 group-hover:scale-110 transition-transform"></i>
+                            <div class="font-bold text-2xl text-white">600+</div>
+                            <div class="text-sm text-slate-500 font-medium">Saat BTK Eğitimi</div>
                         </div>
                     </div>
                 </div>
@@ -290,101 +295,108 @@
     </section>
 
     <!-- Experience & Education Section -->
-    <section id="experience" class="py-20 bg-slate-900 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+    <section id="experience" class="py-24 bg-slate-900 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             
-            <div class="text-center mb-16 reveal-on-scroll">
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Eğitim & <span class="text-cyan-400">Deneyim</span></h2>
-                <p class="text-slate-400 max-w-2xl mx-auto">Akademik yolculuğum ve profesyonel kariyerimden öne çıkan başlıklar.</p>
+            <div class="text-center mb-20 reveal-on-scroll">
+                <span class="text-cyan-500 font-semibold tracking-wider text-sm uppercase">Kariyer Yolculuğu</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-white mt-2 mb-4">Eğitim & <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Deneyim</span></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 mx-auto rounded-full"></div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
                 <!-- Education Column -->
                 <div class="space-y-6 reveal-on-scroll">
-                    <h3 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
-                        <i class="fas fa-graduation-cap text-cyan-400"></i> Akademik Eğitim
+                    <h3 class="text-2xl font-bold text-white flex items-center gap-3 mb-8">
+                        <span class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
+                            <i class="fas fa-graduation-cap text-cyan-400"></i>
+                        </span>
+                        Akademik Eğitim
                     </h3>
                     
                     <!-- PhD -->
-                    <div class="glass p-6 rounded-xl border border-slate-700 border-l-4 border-l-cyan-500 hover:bg-slate-800/50 transition-colors">
-                        <div class="flex justify-between items-start">
+                    <div class="glass p-6 rounded-2xl border border-slate-700 hover:border-cyan-500/50 transition-all group">
+                        <div class="flex justify-between items-start mb-2">
                             <div>
-                                <h4 class="text-xl font-bold text-white">Doktora (Dr.)</h4>
-                                <p class="text-cyan-400">Akdeniz Üniversitesi</p>
+                                <h4 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">Doktora (Dr.)</h4>
+                                <p class="text-slate-400">Akdeniz Üniversitesi</p>
                             </div>
-                            <span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-400">2015 - 2019</span>
+                            <span class="px-3 py-1 bg-cyan-500/10 text-cyan-400 text-xs font-bold rounded-full border border-cyan-500/20">2015 - 2019</span>
                         </div>
-                        <p class="text-slate-400 mt-2 text-sm">Eğitim Yönetimi, Teftişi, Planlaması ve Ekonomisi.</p>
-                        <p class="text-slate-500 text-xs mt-1 italic">Tez: Veri Madenciliği ile Öğrenci Akademik Performans Tahmini (GPA: 4.0/4.0)</p>
+                        <p class="text-slate-400 text-sm mt-3">Eğitim Yönetimi, Teftişi, Planlaması ve Ekonomisi.</p>
+                        <p class="text-slate-500 text-xs mt-2 italic border-l-2 border-slate-700 pl-3">Tez: Veri Madenciliği ile Öğrenci Akademik Performans Tahmini (GPA: 4.0/4.0)</p>
                     </div>
 
                     <!-- Master -->
-                    <div class="glass p-6 rounded-xl border border-slate-700 border-l-4 border-l-blue-500 hover:bg-slate-800/50 transition-colors">
-                        <div class="flex justify-between items-start">
+                    <div class="glass p-6 rounded-2xl border border-slate-700 hover:border-blue-500/50 transition-all group">
+                        <div class="flex justify-between items-start mb-2">
                             <div>
-                                <h4 class="text-xl font-bold text-white">Yüksek Lisans</h4>
-                                <p class="text-blue-400">Dokuz Eylül Üniversitesi</p>
+                                <h4 class="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">Yüksek Lisans</h4>
+                                <p class="text-slate-400">Dokuz Eylül Üniversitesi</p>
                             </div>
-                            <span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-400">2009 - 2013</span>
+                            <span class="px-3 py-1 bg-blue-500/10 text-blue-400 text-xs font-bold rounded-full border border-blue-500/20">2009 - 2013</span>
                         </div>
-                        <p class="text-slate-400 mt-2 text-sm">Eğitim Bilimleri Enstitüsü.</p>
+                        <p class="text-slate-400 text-sm mt-3">Eğitim Bilimleri Enstitüsü.</p>
                     </div>
 
                     <!-- Bachelor -->
-                    <div class="glass p-6 rounded-xl border border-slate-700 border-l-4 border-l-purple-500 hover:bg-slate-800/50 transition-colors">
-                        <div class="flex justify-between items-start">
+                    <div class="glass p-6 rounded-2xl border border-slate-700 hover:border-purple-500/50 transition-all group">
+                        <div class="flex justify-between items-start mb-2">
                             <div>
-                                <h4 class="text-xl font-bold text-white">Lisans</h4>
-                                <p class="text-purple-400">Eskişehir Osmangazi Üniversitesi</p>
+                                <h4 class="text-xl font-bold text-white group-hover:text-purple-400 transition-colors">Lisans</h4>
+                                <p class="text-slate-400">Eskişehir Osmangazi Üniversitesi</p>
                             </div>
-                            <span class="text-xs bg-slate-800 px-2 py-1 rounded text-slate-400">2000 - 2004</span>
+                            <span class="px-3 py-1 bg-purple-500/10 text-purple-400 text-xs font-bold rounded-full border border-purple-500/20">2000 - 2004</span>
                         </div>
-                        <p class="text-slate-400 mt-2 text-sm">Bilgisayar ve Öğretim Teknolojileri Eğitimi.</p>
+                        <p class="text-slate-400 text-sm mt-3">Bilgisayar ve Öğretim Teknolojileri Eğitimi.</p>
                     </div>
                 </div>
 
                 <!-- Experience Column -->
                 <div class="space-y-6 reveal-on-scroll" style="animation-delay: 200ms;">
-                    <h3 class="text-2xl font-bold text-white flex items-center gap-3 mb-6">
-                        <i class="fas fa-briefcase text-cyan-400"></i> Profesyonel Deneyim
+                    <h3 class="text-2xl font-bold text-white flex items-center gap-3 mb-8">
+                        <span class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                            <i class="fas fa-briefcase text-blue-400"></i>
+                        </span>
+                        Profesyonel Deneyim
                     </h3>
 
                     <!-- BTK -->
-                    <div class="glass p-6 rounded-xl border border-slate-700 relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-20 h-20 bg-cyan-500/10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:bg-cyan-500/20"></div>
-                        <h4 class="text-xl font-bold text-white">BTK Akademi Eğitmeni</h4>
-                        <p class="text-cyan-400 text-sm mb-2">Bilgi Teknolojileri ve İletişim Kurumu | 3 Yıl</p>
-                        <ul class="list-disc list-inside text-slate-400 text-sm space-y-1">
-                            <li>Python, Makine Öğrenmesi, LLM Eğitimleri (600+ Saat)</li>
-                            <li>Yapay Zeka Atölyeleri ve İleri Seviye ML</li>
+                    <div class="glass p-6 rounded-2xl border border-slate-700 hover:bg-slate-800/50 transition-all relative overflow-hidden group">
+                        <div class="absolute -right-4 -top-4 w-24 h-24 bg-cyan-500/10 rounded-full blur-xl group-hover:bg-cyan-500/20 transition-all"></div>
+                        <h4 class="text-xl font-bold text-white mb-1">BTK Akademi Eğitmeni</h4>
+                        <p class="text-cyan-400 text-sm font-medium mb-3">Bilgi Teknolojileri ve İletişim Kurumu | 3 Yıl</p>
+                        <ul class="text-slate-400 text-sm space-y-2">
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-cyan-500 mt-1"></i> Python, Makine Öğrenmesi, LLM Eğitimleri (600+ Saat)</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-cyan-500 mt-1"></i> Yapay Zeka Atölyeleri ve İleri Seviye ML</li>
                         </ul>
                     </div>
 
                     <!-- MEB / YEĞİTEK -->
-                    <div class="glass p-6 rounded-xl border border-slate-700 relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:bg-blue-500/20"></div>
-                        <h4 class="text-xl font-bold text-white">İçerik Geliştirici & Eğitmen</h4>
-                        <p class="text-blue-400 text-sm mb-2">MEB YEĞİTEK & Hizmetiçi Eğitim</p>
-                        <ul class="list-disc list-inside text-slate-400 text-sm space-y-1">
-                            <li>EBA ve ÖBA Yapay Zeka İçerik Geliştirme</li>
-                            <li>Öğretmen Eğitimleri (400+ Saat)</li>
+                    <div class="glass p-6 rounded-2xl border border-slate-700 hover:bg-slate-800/50 transition-all relative overflow-hidden group">
+                        <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/20 transition-all"></div>
+                        <h4 class="text-xl font-bold text-white mb-1">İçerik Geliştirici & Eğitmen</h4>
+                        <p class="text-blue-400 text-sm font-medium mb-3">MEB YEĞİTEK & Hizmetiçi Eğitim</p>
+                        <ul class="text-slate-400 text-sm space-y-2">
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-blue-500 mt-1"></i> EBA ve ÖBA Yapay Zeka İçerik Geliştirme</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-blue-500 mt-1"></i> Öğretmen Eğitimleri (400+ Saat)</li>
                         </ul>
                     </div>
 
                     <!-- University -->
-                    <div class="glass p-6 rounded-xl border border-slate-700 relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-20 h-20 bg-purple-500/10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:bg-purple-500/20"></div>
-                        <h4 class="text-xl font-bold text-white">Öğretim Görevlisi</h4>
-                        <p class="text-purple-400 text-sm mb-2">Akdeniz Üniversitesi | 6 Yıl</p>
+                    <div class="glass p-6 rounded-2xl border border-slate-700 hover:bg-slate-800/50 transition-all relative overflow-hidden group">
+                        <div class="absolute -right-4 -top-4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl group-hover:bg-purple-500/20 transition-all"></div>
+                        <h4 class="text-xl font-bold text-white mb-1">Öğretim Görevlisi</h4>
+                        <p class="text-purple-400 text-sm font-medium mb-3">Akdeniz Üniversitesi | 6 Yıl</p>
                         <p class="text-slate-400 text-sm">Korkuteli MYO ve YBS Bölümü'nde programlama ve robotik dersleri.</p>
                     </div>
 
                      <!-- Projects -->
-                     <div class="glass p-6 rounded-xl border border-slate-700 relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-20 h-20 bg-green-500/10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:bg-green-500/20"></div>
-                        <h4 class="text-xl font-bold text-white">TÜBİTAK Projeleri</h4>
-                        <p class="text-green-400 text-sm mb-2">Proje Yürütücüsü & Danışman</p>
+                     <div class="glass p-6 rounded-2xl border border-slate-700 hover:bg-slate-800/50 transition-all relative overflow-hidden group">
+                        <div class="absolute -right-4 -top-4 w-24 h-24 bg-green-500/10 rounded-full blur-xl group-hover:bg-green-500/20 transition-all"></div>
+                        <h4 class="text-xl font-bold text-white mb-1">TÜBİTAK Projeleri</h4>
+                        <p class="text-green-400 text-sm font-medium mb-3">Proje Yürütücüsü & Danışman</p>
                         <p class="text-slate-400 text-sm">4006 Bilim Fuarları, 224B281 Yapay Zeka projeleri ve Deneyap Eğitmenliği.</p>
                     </div>
                 </div>
@@ -393,140 +405,143 @@
     </section>
 
     <!-- Books Section -->
-    <section id="books" class="py-20 bg-slate-900 relative">
+    <section id="books" class="py-24 bg-slate-900 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 reveal-on-scroll">
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Yayınlanmış <span class="text-cyan-400">Eserlerim</span></h2>
+            <div class="text-center mb-20 reveal-on-scroll">
+                <span class="text-cyan-500 font-semibold tracking-wider text-sm uppercase">Yayınlar</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-white mt-2 mb-4">Kitap <span class="text-cyan-400">Eserlerim</span></h2>
                 <p class="text-slate-400 max-w-2xl mx-auto">Eğitim ve teknoloji dünyasına katkı sunmak amacıyla kaleme aldığım kitaplar.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Kitap 1 -->
-                <div class="glass p-6 rounded-xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll">
-                    <div class="h-48 bg-gradient-to-br from-blue-900 to-slate-800 rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
-                        <i class="fas fa-chalkboard-teacher text-6xl text-blue-400/50 group-hover:scale-110 transition-transform duration-500"></i>
-                        <div class="absolute inset-0 bg-blue-500/10 group-hover:bg-blue-500/0 transition-colors"></div>
+                <div class="glass p-8 rounded-2xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll flex flex-col">
+                    <div class="h-40 bg-gradient-to-br from-blue-900/50 to-slate-800 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-chalkboard-teacher text-5xl text-blue-400/50 group-hover:scale-110 transition-transform duration-500"></i>
+                        <div class="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/0 transition-colors"></div>
                     </div>
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-bold bg-cyan-500/20 text-cyan-400 px-2 py-1 rounded">2023</span>
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-bold bg-cyan-500/10 text-cyan-400 px-2.5 py-1 rounded-md border border-cyan-500/20">2023</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">Yapay Zekâ Öğretmen El Kitabı</h3>
-                    <p class="text-slate-400 text-sm">Eğitimciler için yapay zeka araçlarının sınıfta kullanımı üzerine kapsamlı bir rehber.</p>
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors">Yapay Zekâ Öğretmen El Kitabı</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed flex-grow">Eğitimciler için yapay zeka araçlarının sınıfta kullanımı üzerine kapsamlı bir rehber.</p>
                 </div>
+
                  <!-- Kitap 6 -->
-                 <div class="glass p-6 rounded-xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll" style="animation-delay: 200ms;">
-                    <div class="h-48 bg-gradient-to-br from-pink-900 to-slate-800 rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
-                        <i class="fas fa-border-all text-6xl text-pink-400/50 group-hover:scale-110 transition-transform duration-500"></i>
+                 <div class="glass p-8 rounded-2xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll flex flex-col" style="animation-delay: 200ms;">
+                    <div class="h-40 bg-gradient-to-br from-pink-900/50 to-slate-800 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-border-all text-5xl text-pink-400/50 group-hover:scale-110 transition-transform duration-500"></i>
                     </div>
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-bold bg-pink-500/20 text-pink-400 px-2 py-1 rounded">2023</span>
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-bold bg-pink-500/10 text-pink-400 px-2.5 py-1 rounded-md border border-pink-500/20">2023</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-pink-400 transition-colors">Kilim Kodluyorum</h3>
-                    <p class="text-slate-400 text-sm">Geleneksel motiflerle bilgisayarsız kodlama (unplugged) etkinlikleri.</p>
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-pink-400 transition-colors">Kilim Kodluyorum</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed flex-grow">Geleneksel motiflerle bilgisayarsız kodlama (unplugged) etkinlikleri.</p>
                 </div>
 
                 <!-- Kitap 2 -->
-                <div class="glass p-6 rounded-xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll" style="animation-delay: 100ms;">
-                    <div class="h-48 bg-gradient-to-br from-purple-900 to-slate-800 rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
-                        <i class="fas fa-robot text-6xl text-purple-400/50 group-hover:scale-110 transition-transform duration-500"></i>
+                <div class="glass p-8 rounded-2xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll flex flex-col" style="animation-delay: 100ms;">
+                    <div class="h-40 bg-gradient-to-br from-purple-900/50 to-slate-800 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-robot text-5xl text-purple-400/50 group-hover:scale-110 transition-transform duration-500"></i>
                     </div>
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-bold bg-purple-500/20 text-purple-400 px-2 py-1 rounded">2022</span>
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-bold bg-purple-500/10 text-purple-400 px-2.5 py-1 rounded-md border border-purple-500/20">2022</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Yapay Zekâ ve Makine Öğrenmesi</h3>
-                    <p class="text-slate-400 text-sm">Mesleki eğitim müfredatına uygun, teorik ve pratik bilgiler içeren ders kitabı.</p>
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-purple-400 transition-colors">Yapay Zekâ ve Makine Öğrenmesi</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed flex-grow">Mesleki eğitim müfredatına uygun, teorik ve pratik bilgiler içeren ders kitabı.</p>
                 </div>
                 
                 <!-- Kitap 5 -->
-                <div class="glass p-6 rounded-xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll" style="animation-delay: 100ms;">
-                    <div class="h-48 bg-gradient-to-br from-red-900 to-slate-800 rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
-                        <i class="fas fa-microchip text-6xl text-red-400/50 group-hover:scale-110 transition-transform duration-500"></i>
+                <div class="glass p-8 rounded-2xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll flex flex-col" style="animation-delay: 100ms;">
+                    <div class="h-40 bg-gradient-to-br from-red-900/50 to-slate-800 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-microchip text-5xl text-red-400/50 group-hover:scale-110 transition-transform duration-500"></i>
                     </div>
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-bold bg-red-500/20 text-red-400 px-2 py-1 rounded">2021</span>
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-bold bg-red-500/10 text-red-400 px-2.5 py-1 rounded-md border border-red-500/20">2021</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-red-400 transition-colors">Arduino ile Robotik Kodlama</h3>
-                    <p class="text-slate-400 text-sm">Donanım ve yazılımı birleştirerek robotik projeler geliştirmek isteyenler için.</p>
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-red-400 transition-colors">Arduino ile Robotik Kodlama</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed flex-grow">Donanım ve yazılımı birleştirerek robotik projeler geliştirmek isteyenler için.</p>
                 </div>
 
                  <!-- Kitap 4 -->
-                 <div class="glass p-6 rounded-xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll">
-                    <div class="h-48 bg-gradient-to-br from-green-900 to-slate-800 rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
-                        <i class="fas fa-code text-6xl text-green-400/50 group-hover:scale-110 transition-transform duration-500"></i>
+                 <div class="glass p-8 rounded-2xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll flex flex-col">
+                    <div class="h-40 bg-gradient-to-br from-green-900/50 to-slate-800 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fas fa-code text-5xl text-green-400/50 group-hover:scale-110 transition-transform duration-500"></i>
                     </div>
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-bold bg-green-500/20 text-green-400 px-2 py-1 rounded">2021</span>
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-bold bg-green-500/10 text-green-400 px-2.5 py-1 rounded-md border border-green-500/20">2021</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">Robotik ve Kodlama Eğitimi</h3>
-                    <p class="text-slate-400 text-sm">Algoritmik düşünme ve temel kodlama becerilerini geliştirmek için başvuru kaynağı.</p>
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-green-400 transition-colors">Robotik ve Kodlama Eğitimi</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed flex-grow">Algoritmik düşünme ve temel kodlama becerilerini geliştirmek için başvuru kaynağı.</p>
                 </div>
 
                 <!-- Kitap 3 -->
-                <div class="glass p-6 rounded-xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll" style="animation-delay: 200ms;">
-                    <div class="h-48 bg-gradient-to-br from-yellow-900 to-slate-800 rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
-                        <i class="fab fa-python text-6xl text-yellow-400/50 group-hover:scale-110 transition-transform duration-500"></i>
+                <div class="glass p-8 rounded-2xl border border-slate-700 transition-all duration-300 card-hover group reveal-on-scroll flex flex-col" style="animation-delay: 200ms;">
+                    <div class="h-40 bg-gradient-to-br from-yellow-900/50 to-slate-800 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden">
+                        <i class="fab fa-python text-5xl text-yellow-400/50 group-hover:scale-110 transition-transform duration-500"></i>
                     </div>
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-bold bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">2020</span>
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-bold bg-yellow-500/10 text-yellow-400 px-2.5 py-1 rounded-md border border-yellow-500/20">2020</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">Herkes İçin Python</h3>
-                    <p class="text-slate-400 text-sm">Programlamaya yeni başlayanlar için adım adım Python dili rehberi.</p>
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-yellow-400 transition-colors">Herkes İçin Python</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed flex-grow">Programlamaya yeni başlayanlar için adım adım Python dili rehberi.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-b from-slate-900 to-black"></div>
+    <section id="contact" class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-slate-900 to-slate-900"></div>
         <div class="max-w-5xl mx-auto px-4 relative z-10 text-center reveal-on-scroll">
-            <h2 class="text-3xl md:text-4xl font-bold text-white mb-8">İletişime <span class="text-cyan-400">Geçin</span></h2>
-            <p class="text-slate-400 mb-12 text-lg">Eğitim, danışmanlık veya projeler için bana ulaşabilirsiniz.</p>
+            <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">İletişime <span class="text-cyan-400">Geçin</span></h2>
+            <p class="text-slate-400 mb-16 text-lg max-w-xl mx-auto">Eğitim, danışmanlık veya projeler için sosyal medya hesaplarımdan veya mail yoluyla bana ulaşabilirsiniz.</p>
             
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-12">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mb-16">
                 <!-- Email -->
-                <a href="mailto:emurataltun@gmail.com" class="glass p-4 rounded-xl border border-slate-800 hover:border-cyan-500 transition-all group flex flex-col items-center">
-                    <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-cyan-500 transition-colors">
-                        <i class="fas fa-envelope text-white"></i>
+                <a href="mailto:emurataltun@gmail.com" class="glass p-6 rounded-2xl border border-slate-800 hover:border-cyan-500 transition-all group flex flex-col items-center hover:bg-slate-800">
+                    <div class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:bg-cyan-500 transition-colors shadow-lg">
+                        <i class="fas fa-envelope text-white text-lg"></i>
                     </div>
-                    <span class="text-white text-sm font-semibold">Email</span>
+                    <span class="text-white text-sm font-semibold group-hover:text-cyan-400 transition-colors">Email</span>
                 </a>
 
                 <!-- LinkedIn -->
-                <a href="https://www.linkedin.com/in/drmurataltun/" target="_blank" class="glass p-4 rounded-xl border border-slate-800 hover:border-blue-500 transition-all group flex flex-col items-center">
-                    <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-blue-600 transition-colors">
-                        <i class="fab fa-linkedin-in text-white"></i>
+                <a href="https://www.linkedin.com/in/drmurataltun/" target="_blank" class="glass p-6 rounded-2xl border border-slate-800 hover:border-blue-500 transition-all group flex flex-col items-center hover:bg-slate-800">
+                    <div class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors shadow-lg">
+                        <i class="fab fa-linkedin-in text-white text-lg"></i>
                     </div>
-                    <span class="text-white text-sm font-semibold">LinkedIn</span>
+                    <span class="text-white text-sm font-semibold group-hover:text-blue-400 transition-colors">LinkedIn</span>
                 </a>
 
                 <!-- Instagram -->
-                <a href="https://www.instagram.com/drmurataltun/" target="_blank" class="glass p-4 rounded-xl border border-slate-800 hover:border-pink-500 transition-all group flex flex-col items-center">
-                    <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 transition-colors">
-                        <i class="fab fa-instagram text-white"></i>
+                <a href="https://www.instagram.com/drmurataltun/" target="_blank" class="glass p-6 rounded-2xl border border-slate-800 hover:border-pink-500 transition-all group flex flex-col items-center hover:bg-slate-800">
+                    <div class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 transition-colors shadow-lg">
+                        <i class="fab fa-instagram text-white text-lg"></i>
                     </div>
-                    <span class="text-white text-sm font-semibold">Instagram</span>
+                    <span class="text-white text-sm font-semibold group-hover:text-pink-400 transition-colors">Instagram</span>
                 </a>
 
                  <!-- Linktree -->
-                 <a href="https://linktr.ee/drmurataltun" target="_blank" class="glass p-4 rounded-xl border border-slate-800 hover:border-green-500 transition-all group flex flex-col items-center">
-                    <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-green-500 transition-colors">
-                        <i class="fas fa-tree text-white"></i>
+                 <a href="https://linktr.ee/drmurataltun" target="_blank" class="glass p-6 rounded-2xl border border-slate-800 hover:border-green-500 transition-all group flex flex-col items-center hover:bg-slate-800">
+                    <div class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:bg-green-500 transition-colors shadow-lg">
+                        <i class="fas fa-tree text-white text-lg"></i>
                     </div>
-                    <span class="text-white text-sm font-semibold">Linktree</span>
+                    <span class="text-white text-sm font-semibold group-hover:text-green-400 transition-colors">Linktree</span>
                 </a>
 
                  <!-- ResearchGate -->
-                 <a href="https://www.researchgate.net/profile/Murat_Altun2" target="_blank" class="glass p-4 rounded-xl border border-slate-800 hover:border-teal-500 transition-all group flex flex-col items-center">
-                    <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center mb-3 group-hover:bg-teal-500 transition-colors">
-                        <i class="fas fa-graduation-cap text-white"></i>
+                 <a href="https://www.researchgate.net/profile/Murat_Altun2" target="_blank" class="glass p-6 rounded-2xl border border-slate-800 hover:border-teal-500 transition-all group flex flex-col items-center hover:bg-slate-800">
+                    <div class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:bg-teal-500 transition-colors shadow-lg">
+                        <i class="fas fa-graduation-cap text-white text-lg"></i>
                     </div>
-                    <span class="text-white text-sm font-semibold">ResearchGate</span>
+                    <span class="text-white text-sm font-semibold group-hover:text-teal-400 transition-colors">ResearchGate</span>
                 </a>
             </div>
             
-            <div class="text-slate-500 text-sm border-t border-slate-800 pt-8">
-                &copy; 2025 Dr. Murat Altun. Tüm hakları saklıdır.
+            <div class="text-slate-600 text-sm border-t border-slate-800/50 pt-10">
+                <p>&copy; 2025 Dr. Murat Altun. Tüm hakları saklıdır.</p>
+                <p class="mt-2 text-xs opacity-50">Yapay Zeka ile tasarlandı.</p>
             </div>
         </div>
     </section>
@@ -574,7 +589,8 @@
 
         // Scroll Reveal Animation
         const observerOptions = {
-            threshold: 0.1
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -596,11 +612,13 @@
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 50) {
-                nav.classList.add('shadow-lg');
-                nav.classList.add('bg-slate-900/90');
+                nav.classList.add('shadow-xl');
+                nav.classList.add('bg-slate-900/95');
+                nav.classList.remove('glass');
             } else {
-                nav.classList.remove('shadow-lg');
-                nav.classList.remove('bg-slate-900/90');
+                nav.classList.remove('shadow-xl');
+                nav.classList.remove('bg-slate-900/95');
+                nav.classList.add('glass');
             }
         });
 
